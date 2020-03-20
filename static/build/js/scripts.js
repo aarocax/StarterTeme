@@ -1,0 +1,1 @@
+!function(){jQuery(this)}();var c="como";jQuery;

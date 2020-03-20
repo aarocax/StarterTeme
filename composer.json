@@ -1,0 +1,14 @@
+{		
+		"autoload": {
+	      "psr-4": {
+	          "METRIC\\":"src/"
+	      }
+  	},
+    "require-dev": {
+        "symfony/var-dumper": "^5.0"
+    },
+    "require": {
+        "symfony/console": "^5.0",
+				"timber/timber": "^1.15"
+    }
+}
