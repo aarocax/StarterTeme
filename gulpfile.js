@@ -1,56 +1,33 @@
  // Gulp.js configuration
 'use strict';
 
-const
-
-  // source and build folders
-  dir = {
-    src         : './static/',
-    build       : './static/build/'
-  },
-
-  // Gulp and plugins
-  gulp          = require('gulp'),
-  gutil         = require('gulp-util'),
-  newer         = require('gulp-newer'),
-  imagemin      = require('gulp-imagemin'),
-  sass          = require('gulp-sass'),
-  postcss       = require('gulp-postcss'),
-  deporder      = require('gulp-deporder'),
-  concat        = require('gulp-concat'),
-  stripdebug    = require('gulp-strip-debug'),
-  uglify        = require('gulp-uglify')
-;
-
-// Browser-sync
-var browsersync = true;
+var gulp       = require('gulp');
+var concat     = require('gulp-concat');
+var sass       = require('gulp-sass');
+var watch      = require('gulp-watch');
+var stripdebug = require('gulp-strip-debug');
+var uglify     = require('gulp-uglify');
+//var minifyCSS  = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 
 
-// JavaScript settings
-const js = {
-  src         : dir.src + 'js/*',
-  build       : dir.build + 'js/',
-  filename    : 'scripts.js'
-};
-
-// JavaScript processing
-gulp.task('js', () => {
-	console.log(js);
-  return gulp.src(js.src)
-    .pipe(deporder())
-    .pipe(concat(js.filename))
-    .pipe(stripdebug())
-    .pipe(uglify())
-    .pipe(gulp.dest(js.build))
-    .pipe(browsersync ? browsersync.reload({ stream: true }) : gutil.noop());
-
+gulp.task('css', function() {
+  return gulp.src([
+                    './static/css/styles.css',
+                  ])
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(concat('./static/build/css/site.css'))
+        .pipe(gulp.dest('./'));
 });
 
-
 // Concat js
-gulp.task('js2', function() {
-  return gulp.src([ './static/js/*.js' ])
-        .pipe(concat('./static/build/js/concat.js'))
+gulp.task('js', function() {
+  return gulp.src([ 
+                    './static/js/SiteUtils.js', // Librería con el endpoint ajax y otras utilidades
+                    './static/js/scripts.js',
+                    './static/js/other_scripts.js',
+                  ])
+        .pipe(concat('./static/build/js/site.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./'));
 });
@@ -58,5 +35,5 @@ gulp.task('js2', function() {
 
 // Gulp watch
 gulp.task('watch', function() {
-  gulp.watch('./static/js/*.js', gulp.series('js2'));
+  gulp.watch('./static/js/*.js', gulp.series('js'));
 });

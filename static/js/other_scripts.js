@@ -1,6 +1,6 @@
 (function($){
 
-	console.log('other_scripts.js....');
+	console.log('other_scripts.js...');
 
 
 })(jQuery);

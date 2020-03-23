@@ -11,24 +11,25 @@ use METRIC\app\setup\StarterSite;
 
 // Activación de librerías de terceros
 define('DEACTIVATE_GUTEMBERG', true);
-define('USE_OWL_CAROUSEL2_LIBRARY', true);
-define('WAYPOINTS_LIBRARY', true);
+define('DEV_MODE', true); // carga los ficheros js y css por separado para depuración
 
 // Carga de archivos javascript
-$scripts_admin = ['scripts2.js'];
-
-// Carga using gulp
-//$scripts_frontend = ['../build/js/concat.js'];
-
-$scripts_frontend = ['scripts.js', 'other_scripts.js'];
-
-// Archivos que contienen llamadas ajax
-$ajax_scripts = [];
-
-// Carga de archivos css
+$scripts_frontend = []; 
+$scripts_admin = []; // carga script para el panel de administración (si son necesarios);
 $css_admin = [];
 $css_frontend = [];
 
+if (DEV_MODE) {
+	$scripts_frontend = [ 'SiteUtils.js', 'scripts.js', 'other_scripts.js' ];
+	$css_frontend = ['styles.css'];
+} else {
+	$scripts_frontend = [
+		'../build/js/site.js',
+	];
+	$css_frontend = ['../build/css/site.css'];
+}
+
+
 $mime_types = [['svg','image/svg+xml']];
 
-new StarterSite($scripts_admin, $scripts_frontend, $ajax_scripts, $css_admin, $css_frontend, $mime_types);
+new StarterSite($scripts_admin, $scripts_frontend, $css_admin, $css_frontend, $mime_types);
