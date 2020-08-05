@@ -107,15 +107,21 @@ class StarterSite extends Site
 
 	public function load_styles( $twig )
 	{
-		foreach ($this->css_frontend as $key => $script) {
-			wp_enqueue_style('styles_'.$key, get_template_directory_uri() . '/static/css/'.$script, array(), false, 'all');
+		if (DEV_MODE) {
+			foreach ($this->css_frontend as $key => $script) {
+				wp_enqueue_style('styles_'.$key, get_template_directory_uri() . '/static/src/css/'.$script, array(), false, 'all');
+			}
+		} else {
+			foreach ($this->css_frontend as $key => $script) {
+				wp_enqueue_style('styles_'.$key, get_template_directory_uri() . '/static/build/css/'.$script, array(), false, 'all');
+			}
 		}
 	}
 
 	public function admin_load_styles( $twig )
 	{
 		foreach ($this->css_admin as $key => $script) {
-			wp_enqueue_style('styles_'.$key, get_template_directory_uri() . '/static/css/'.$script, array(), false, 'all');
+			wp_enqueue_style('styles_'.$key, get_template_directory_uri() . '/static/src/css/'.$script, array(), false, 'all');
 		}
 	}
 
@@ -131,20 +137,20 @@ class StarterSite extends Site
 			if (DEV_MODE) {
 				// Carga la librería de utilidades con el endpoint Ajax
 				if ($script == "SiteUtils.js") {
-					wp_register_script('site_utils', get_template_directory_uri() . '/static/js/SiteUtils.js', __FILE__);
-					wp_enqueue_script('site_utils', get_template_directory_uri() . '/static/js/SiteUtils.js', array('jquery'), false, true);
+					wp_register_script('site_utils', get_template_directory_uri() . '/static/src/js/SiteUtils.js', __FILE__);
+					wp_enqueue_script('site_utils', get_template_directory_uri() . '/static/src/js/SiteUtils.js', array('jquery'), false, true);
 
 					wp_localize_script('site_utils', 'PT_Ajax', array(
 			    	'ajaxurl' => admin_url('admin-ajax.php'),
 						'nonce' => wp_create_nonce('ajax-post-nonce')
 					));
 				} else {
-					wp_register_script('script_'.$key, get_template_directory_uri() . '/static/js/'.$script, __FILE__);
-					wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/js/'.$script, array('jquery'), false, true);
+					wp_register_script('script_'.$key, get_template_directory_uri() . '/static/src/js/'.$script, __FILE__);
+					wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/src/js/'.$script, array('jquery'), false, true);
 				}
 			} else {
-				wp_register_script('script_'.$key, get_template_directory_uri() . '/static/js/'.$script, __FILE__);
-				wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/js/'.$script, array('jquery'), false, true);
+				wp_register_script('script_'.$key, get_template_directory_uri() . '/static/build/js/'.$script, __FILE__);
+				wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/build/js/'.$script, array('jquery'), false, true);
 
 				wp_localize_script('script_'.$key, 'PT_Ajax', array(
 		    	'ajaxurl' => admin_url('admin-ajax.php'),
@@ -160,8 +166,13 @@ class StarterSite extends Site
 	public function admin_load_scripts( $scripts )
 	{
 		foreach ($this->scripts_admin as $key => $script) {
-			wp_register_script('script_'.$key, get_template_directory_uri() . '/static/js/admin/'.$script, __FILE__);
-			wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/js/admin/'.$script, array('jquery'), false, true);
+			if (DEV_MODE) {
+				wp_register_script('script_'.$key, get_template_directory_uri() . '/static/src/js/admin/'.$script, __FILE__);
+				wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/src/js/admin/'.$script, array('jquery'), false, true);
+			} else {
+				wp_register_script('script_'.$key, get_template_directory_uri() . '/static/build/js/admin/'.$script, __FILE__);
+				wp_enqueue_script('script_'.$key, get_template_directory_uri() . '/static/build/js/admin/'.$script, array('jquery'), false, true);
+			}
 		}
 	}
 

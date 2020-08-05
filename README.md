@@ -7,6 +7,7 @@ Descargar el tema y poner en la carpeta wp-content/themes
 1. Descargar el zip de theme (o clonarlo) y moverlo a la carpeta `wp-content/themes` de la instalación de wordpress
 2. Renombrar la carpeta del theme y cambiar el nombre en el archivo `styles.css` del directorio raíz 
 3. Instalar dependencias PHP ejecutar ```composer install```
+3. Instalar dependencias node ejecutar ```npm install```
 4. Instalar dependencias GULP (si se quiere utilizar sass, concatenación de archivos y uglify)
 5. Activar theme en Apariencia > Themes.
 
@@ -27,13 +28,13 @@ Descargar el tema y poner en la carpeta wp-content/themes
 `static` archivos css, js, sass,imágenes, iconosm svg's.
 - `static/assets` imágenes, iconosm svg's.
 - `static/build` archivos de salida GULP.
-- `static/css` archivos css.
-- `static/css/admin` archivos css para el panel de administración (si son necesarios).
+- `static/src` archivos fuente GULP.
+- `static/src/css` archivos fuente css.
+- `static/src/css/admin` archivos fuente css para el panel de administración (si son necesarios).
 - `static/fonts` fuentes letra.
-- `static/js` archivos js.
-- `static/js/admin` archivos js para el panel de administración (si son necesarios).
+- `static/src/js` archivos fuente js.
+- `static/src/js/admin` archivos fuente js para el panel de administración (si son necesarios).
 - `static/sass` archivos sass.
-- `static/vendor` paquetes node.
 `templates` archivos twig.
 
 ## Other Resources

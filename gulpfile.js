@@ -8,7 +8,8 @@ var watch      = require('gulp-watch');
 var stripdebug = require('gulp-strip-debug');
 var uglify     = require('gulp-uglify');
 //var minifyCSS  = require('gulp-minify-css');
-var cleanCSS = require('gulp-clean-css');
+var cleanCSS   = require('gulp-clean-css');
+var merge      = require('merge-stream');
 
 
 gulp.task('css', function() {
@@ -22,14 +23,34 @@ gulp.task('css', function() {
 
 // Concat js
 gulp.task('js', function() {
-  return gulp.src([ 
-                    './static/js/SiteUtils.js', // Librería con el endpoint ajax y otras utilidades
-                    './static/js/scripts.js',
-                    './static/js/other_scripts.js',
+
+  // script para uso en la parte pública
+  var concatenados = gulp.src([ 
+                    './static/src/js/SiteUtils.js', // Librería con el endpoint ajax y otras utilidades
+                    './static/src/js/scripts.js',
+                    './static/src/js/other_scripts.js',
                   ])
         .pipe(concat('./static/build/js/site.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./'));
+
+  // scripts para uso en panel de administración
+  var concatenados_admin = gulp.src([ 
+                    './static/src/js/admin/scripts_admin.js',
+                  ])
+        .pipe(concat('./static/build/js/admin/site_admin.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./'));
+
+  // mueve archivos no concatenados a la carpeta build
+  var no_concatenados = gulp
+        .src([
+          './static/src/js/no_concatenar.js'
+          ])
+        .pipe(gulp.dest('static/build/js'));
+
+  return merge(concatenados, no_concatenados, concatenados_admin);
+
 });
 
 
